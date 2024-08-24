@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
@@ -33,21 +34,20 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Section::make('Student Details')->schema([
-                    TextInput::make('name')->maxLength(255)->required(),
-                    TextInput::make('email')->email()->unique(ignoreRecord: true)->required(),
+                    TextInput::make('name')->label('Student Name')->maxLength(255)->required(),
+                    TextInput::make('email')->label('Student email')->email()->unique(ignoreRecord: true)->required(),
                     TextInput::make('phone')->unique(ignoreRecord: true)->tel()->prefix('+ 91 '),
                     TextInput::make('usn')->rules(['regex:/^[0-9]{1}[A-Za-z]{2}[0-9]{2}[A-Za-z]{2}[0-9]{3}$/'])
                         ->validationAttribute('usn')->unique(ignoreRecord: true)
                         ->helperText('Ex: 4JK21CS016 or 4jk21cs016')->required(),
-                    TextInput::make('password')->password()->required(),
+                    DatePicker::make('dob')->default(now())->required()->format('d-m-Y'),
+                    TextInput::make('gender')
+                        ->required(),
                     FileUpload::make('image')->image(),
+                    Textarea::make('address')->required(),
                 ])->columns(2),
-                Textarea::make('address')
-                    ->columnSpanFull(),
-                Toggle::make('is_admin')
-                    ->required(),
-                TextInput::make('branch')
-                    ->required(),
+                Section::make('Academic Details')->schema([
+                    TextInput::make('branch')->required(),
                 TextInput::make('batch'),
                 TextInput::make('cgpa')
                     ->numeric(),
@@ -62,9 +62,13 @@ class UserResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0),
-                DateTimePicker::make('dob'),
-                TextInput::make('gender')
-                    ->required(),
+                ])->columns(2),
+
+                Section::make('Authorisation Detials')->schema([
+                    TextInput::make('password')->password()->required(),
+                    Toggle::make('is_admin')->required(),
+                ])->columns(2),
+
                 TextInput::make('resume'),
                 TextInput::make('twelthCertificate'),
                 TextInput::make('tenthCertificate'),
