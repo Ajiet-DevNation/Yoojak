@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'usn' => '4JK21CS001',
             'phone' => '9019003490',
             'address' => 'Bangalore',
-            'is_admin' => false,
+            'is_admin' => true,
             'branch' => 'CSE',
             'batch' => '2021',
             'cgpa' => 8.0,
