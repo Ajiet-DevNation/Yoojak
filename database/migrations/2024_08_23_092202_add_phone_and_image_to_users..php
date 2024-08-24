@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->boolean('is_admin')->default(false);
             $table->enum('branch',['CSE', 'ISE', 'ECE', 'ME', 'CV', 'AIML', 'AIDS', 'ICB','OTHER'])->default('OTHER');
-            $table->string('batch')->nullable();
+            $table->bigInteger('batch')->nullable();
             $table->float('cgpa')->nullable();
             $table->string('current_sem')->nullable();
             $table->float('twelthPercentage')->nullable();

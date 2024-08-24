@@ -6,9 +6,13 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -33,38 +37,61 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Section::make('Student Details')->schema([
-                    TextInput::make('name')->maxLength(255)->required(),
-                    TextInput::make('email')->email()->unique(ignoreRecord: true)->required(),
+                    TextInput::make('name')->label('Student Name')->maxLength(255)->required(),
+                    TextInput::make('email')->label('Student email')->email()->unique(ignoreRecord: true)->required(),
                     TextInput::make('phone')->unique(ignoreRecord: true)->tel()->prefix('+ 91 '),
                     TextInput::make('usn')->rules(['regex:/^[0-9]{1}[A-Za-z]{2}[0-9]{2}[A-Za-z]{2}[0-9]{3}$/'])
                         ->validationAttribute('usn')->unique(ignoreRecord: true)
                         ->helperText('Ex: 4JK21CS016 or 4jk21cs016')->required(),
-                    TextInput::make('password')->password()->required(),
+                    DatePicker::make('dob')->default(now())->required()->format('d-m-Y'),
+                    TextInput::make('gender')
+                        ->required(),
                     FileUpload::make('image')->image(),
+                    Textarea::make('address')->required(),
                 ])->columns(2),
-                Textarea::make('address')
-                    ->columnSpanFull(),
-                Toggle::make('is_admin')
-                    ->required(),
-                TextInput::make('branch')
-                    ->required(),
-                TextInput::make('batch'),
-                TextInput::make('cgpa')
-                    ->numeric(),
-                TextInput::make('current_sem'),
-                TextInput::make('twelthPercentage')
-                    ->numeric(),
-                TextInput::make('tenthPercentage')
-                    ->numeric(),
-                TextInput::make('diplomaPercentage')
-                    ->numeric(),
-                TextInput::make('backlogs')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                DateTimePicker::make('dob'),
-                TextInput::make('gender')
-                    ->required(),
+
+                Section::make('Academic Details')->schema([
+                    Select::make('branch')->required()->options([
+                        'CSE' => 'CSE',
+                        'ISE' => 'ISE',
+                        'ECE' => 'ECE',
+                        'ME' => 'ME',
+                        'CV' => 'CV',
+                        'AIML' => 'AIML',
+                        'AIDS' => 'AIDS',
+                        'ICB' => 'ICB',
+                        'OTHER' => 'OTHER',
+                    ])->default('OTHER'),
+
+                    TextInput::make('batch')->numeric()->required(),
+                    TextInput::make('cgpa')->numeric()->required(),
+                    TextInput::make('current_sem')->numeric(),
+                    TextInput::make('twelthPercentage')->required()->numeric(),
+                    TextInput::make('tenthPercentage')->numeric()->required(),
+                    TextInput::make('diplomaPercentage')->required()->numeric(),
+                    TextInput::make('backlogs')->required()->numeric()->default(0),
+                ])->columns(2),
+
+                Section::make('Authorisation Detials')->schema([
+                    TextInput::make('password')->password()->required(),
+                    Toggle::make('is_admin')->required(),
+                ])->columns(2),
+
+                Section::make('')->schema([
+                    Section::make('Certificates')->schema([
+                        TextInput::make('resume'),
+                        TextInput::make('twelthCertificate'),
+                        TextInput::make('tenthCertificate'),
+                        TextInput::make('diplomaCertificate'),
+                    ])->columns(2),
+                    Section::make('Socials')->schema([
+                        TextInput::make('linkedin'),
+                        TextInput::make('github'),
+                        TextInput::make('twitter'),
+                        TextInput::make('facebook'),
+                    ])->columns(1),
+                ])->columns(2),
+
                 TextInput::make('resume'),
                 TextInput::make('twelthCertificate'),
                 TextInput::make('tenthCertificate'),
@@ -74,7 +101,7 @@ class UserResource extends Resource
                 TextInput::make('twitter'),
                 TextInput::make('facebook'),
                 DateTimePicker::make('email_verified_at')->default(now()),
-            ]);
+            ])->columns(2);
     }
 
     public static function table(Table $table): Table
