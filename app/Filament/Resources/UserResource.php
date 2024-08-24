@@ -6,9 +6,18 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -17,57 +26,54 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required(),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required(),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required(),
-                Forms\Components\TextInput::make('usn'),
-                Forms\Components\TextInput::make('phone')
-                    ->tel(),
-                Forms\Components\FileUpload::make('image')
-                    ->image(),
-                Forms\Components\Textarea::make('address')
+                Section::make('Student Details')->schema([
+                    TextInput::make('name')->maxLength(255)->required(),
+                    TextInput::make('email')->email()->unique(ignoreRecord: true)->required(),
+                    TextInput::make('phone')->unique(ignoreRecord: true)->tel()->prefix('+ 91 '),
+                    TextInput::make('usn')->rules(['regex:/^[0-9]{1}[A-Za-z]{2}[0-9]{2}[A-Za-z]{2}[0-9]{3}$/'])
+                        ->validationAttribute('usn')->unique(ignoreRecord: true)
+                        ->helperText('Ex: 4JK21CS016 or 4jk21cs016')->required(),
+                    TextInput::make('password')->password()->required(),
+                    FileUpload::make('image')->image(),
+                ])->columns(2),
+                Textarea::make('address')
                     ->columnSpanFull(),
-                Forms\Components\Toggle::make('is_admin')
+                Toggle::make('is_admin')
                     ->required(),
-                Forms\Components\TextInput::make('branch')
+                TextInput::make('branch')
                     ->required(),
-                Forms\Components\TextInput::make('batch'),
-                Forms\Components\TextInput::make('cgpa')
+                TextInput::make('batch'),
+                TextInput::make('cgpa')
                     ->numeric(),
-                Forms\Components\TextInput::make('current_sem'),
-                Forms\Components\TextInput::make('twelthPercentage')
+                TextInput::make('current_sem'),
+                TextInput::make('twelthPercentage')
                     ->numeric(),
-                Forms\Components\TextInput::make('tenthPercentage')
+                TextInput::make('tenthPercentage')
                     ->numeric(),
-                Forms\Components\TextInput::make('diplomaPercentage')
+                TextInput::make('diplomaPercentage')
                     ->numeric(),
-                Forms\Components\TextInput::make('backlogs')
+                TextInput::make('backlogs')
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\DateTimePicker::make('dob'),
-                Forms\Components\TextInput::make('gender')
+                DateTimePicker::make('dob'),
+                TextInput::make('gender')
                     ->required(),
-                Forms\Components\TextInput::make('resume'),
-                Forms\Components\TextInput::make('twelthCertificate'),
-                Forms\Components\TextInput::make('tenthCertificate'),
-                Forms\Components\TextInput::make('diplomaCertificate'),
-                Forms\Components\TextInput::make('linkedin'),
-                Forms\Components\TextInput::make('github'),
-                Forms\Components\TextInput::make('twitter'),
-                Forms\Components\TextInput::make('facebook'),
+                TextInput::make('resume'),
+                TextInput::make('twelthCertificate'),
+                TextInput::make('tenthCertificate'),
+                TextInput::make('diplomaCertificate'),
+                TextInput::make('linkedin'),
+                TextInput::make('github'),
+                TextInput::make('twitter'),
+                TextInput::make('facebook'),
+                DateTimePicker::make('email_verified_at')->default(now()),
             ]);
     }
 
@@ -75,69 +81,69 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('usn')
+                TextColumn::make('usn')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
+                TextColumn::make('phone')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\IconColumn::make('is_admin')
+                ImageColumn::make('image'),
+                IconColumn::make('is_admin')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('branch')
+                TextColumn::make('branch')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('batch')
+                TextColumn::make('batch')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('cgpa')
+                TextColumn::make('cgpa')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('current_sem')
+                TextColumn::make('current_sem')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('twelthPercentage')
+                TextColumn::make('twelthPercentage')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('tenthPercentage')
+                TextColumn::make('tenthPercentage')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('diplomaPercentage')
+                TextColumn::make('diplomaPercentage')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('backlogs')
+                TextColumn::make('backlogs')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('dob')
+                TextColumn::make('dob')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('gender')
+                TextColumn::make('gender')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('resume')
+                TextColumn::make('resume')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('twelthCertificate')
+                TextColumn::make('twelthCertificate')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('tenthCertificate')
+                TextColumn::make('tenthCertificate')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('diplomaCertificate')
+                TextColumn::make('diplomaCertificate')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('linkedin')
+                TextColumn::make('linkedin')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('github')
+                TextColumn::make('github')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('twitter')
+                TextColumn::make('twitter')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('facebook')
+                TextColumn::make('facebook')
                     ->searchable(),
             ])
             ->filters([
