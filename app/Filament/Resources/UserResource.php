@@ -32,6 +32,13 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+
+    /**
+     * Generates a form for the UserResource.
+     *
+     * @param Form $form The form instance.
+     * @return Form The updated form instance.
+     */
     public static function form(Form $form): Form
     {
         return $form
