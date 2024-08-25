@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             'tenthCertificate' => 'https://example.com/tenth.pdf',
             'linkedin' => 'https://linkedin.com/in/test',
             'github' => 'https://github.com/darshan45672',
-            'twitter' => 'https://twitter.com/darshan45672',
+            'x' => 'https://x.com/darshan45672',
             'facebook' => 'https://facebook.com/darshan45672',
         ]);
     }
