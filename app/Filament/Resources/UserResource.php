@@ -53,7 +53,7 @@ class UserResource extends Resource
                         ->placeholder("4JK21CS016")
                         ->validationAttribute('usn')->unique(ignoreRecord: true)
                         ->helperText('Ex: 4JK21CS016 or 4jk21cs016')->required(),
-                    DatePicker::make('dob')->default(now())->required()->format('d-m-Y'),
+                    DatePicker::make('dob')->default(now())->required(),
                     Select::make('gender')->options([
                         'male' => 'Male',
                         'female' => 'Female',
@@ -101,8 +101,8 @@ class UserResource extends Resource
 
                 Section::make('Certificates')->schema([
                     FileUpload::make('resume')->required()->label('Resume')->acceptedFileTypes(['application/pdf'])
-                        ->rules(['max:2048'])->directory('users/resumes'),
-                    FileUpload::make('tenthCertificate')->label('10th Marks Card')->required()->rules(['max:2048'])
+                        ->rules(['max:2048'])->directory('users/resumes')->openable(),
+                    FileUpload::make('tenthCertificate')->label('10th Marks Card')->openable()->required()->rules(['max:2048'])
                         ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/heic', 'application/pdf'])->directory('users/10-certificates'),
                     FileUpload::make('twelthCertificate')->label('12th Marks Card')
                         ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/heic', 'application/pdf'])->rules(['max:2048'])
