@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('diplomaCertificate')->nullable();
             $table->string('linkedin')->nullable();
             $table->string('github')->nullable();
-            $table->string('twitter')->nullable();
+            $table->string('x')->nullable();
             $table->string('facebook')->nullable();
         });
     }
