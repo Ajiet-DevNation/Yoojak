@@ -100,7 +100,7 @@ class UserResource extends Resource
                 ])->columns(2),
 
                 Section::make('Certificates')->schema([
-                    FileUpload::make('resume')->required()->label('Resume')->acceptedFileTypes(['application/pdf'])
+                    FileUpload::make('resume')->preserveFilenames()->required()->label('Resume')->acceptedFileTypes(['application/pdf'])
                         ->rules(['max:2048'])->directory('users/resumes')->openable(),
                     FileUpload::make('tenthCertificate')->label('10th Marks Card')->openable()->required()->rules(['max:2048'])
                         ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/heic', 'application/pdf'])->directory('users/10-certificates'),
