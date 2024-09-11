@@ -102,12 +102,12 @@ class CreateUser extends CreateRecord
                     ->placeholder('Paste your Facebook profile link')->default(''),
                 ])->columns(2),
             ]),
-            Step::make('hghgh')->schema([
+            Step::make('Authorisation Detials')->schema([
                 // TextInput::make('name')->label('Name')->required(),
-                Section::make('Authorisation Detials')->schema([
+                Section::make('')->schema([
                     TextInput::make('password')->password()->required(),
                     Toggle::make('is_admin')->required(),
-                    DateTimePicker::make('email_verified_at')->default(now()),
+                    DatePicker::make('email_verified_at')->default(now()),
                 ])->columns(2),
             ]),
             // Step::make('hghgh')->schema([
